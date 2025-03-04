@@ -32,4 +32,4 @@ jobs:
 
       - name: 🔍 Run ESLint
         working-directory: ./eco-task-backend
-        run: npm run lint
+        run: npm run lint -- --fix
