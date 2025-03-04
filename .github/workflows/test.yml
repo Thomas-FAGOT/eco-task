@@ -19,12 +19,15 @@ jobs:
         uses: actions/setup-node@v4  
         with:  
           node-version: 22
+          cache: 'npm'
+          cache-dependency-path: eco-task-backend/package-lock.json
 
       - name: 📦 Install dependencies  
         working-directory: ./eco-task-backend
         run: npm install
 
       - name: 📄 Create test environment file  
+        working-directory: ./eco-task-backend
         run: |  
           echo "NODE_ENV=test" > .env.test  
           echo "APP_KEY=some-random-key" >> .env.test  
@@ -33,11 +36,9 @@ jobs:
           echo "SESSION_DRIVER=cookie" >> .env.test
       
       - name: 📂 Check .env.test file
+        working-directory: ./eco-task-backend
         run: cat .env.test
-
-      - name: 🔄 Load environment variables
-        run: export $(grep -v '^#' .env.test | xargs)
 
       - name: 🧪 Run tests  
         working-directory: ./eco-task-backend
-        run: npm test
+        run: ENV_PATH=.env.test npm test
