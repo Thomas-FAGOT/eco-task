@@ -42,6 +42,7 @@ test.group('Users Controller', (group) => {
 
     const ctx = createFakeContext()
     const controller = new UsersController()
+    console.log("test de la connexion")
 
     await controller.index(ctx)
 
