@@ -31,6 +31,9 @@ jobs:
           echo "HOST=127.0.0.1" >> .env.test  
           echo "LOG_LEVEL=info" >> .env.test  
           echo "SESSION_DRIVER=cookie" >> .env.test
+      
+      - name: 📂 Check .env.test file
+        run: cat .env.test
 
       - name: 🧪 Run tests  
         working-directory: ./eco-task-backend
