@@ -1,43 +1,41 @@
-name: Run Tests on Push
+name: Run Tests
 
-on:  
-  push:  
-    branches:  
-      - main  
-      - develop  
+on:
+  push:
+    branches:
+      - main
+      - develop
   pull_request:
+    branches:
+      - main
+      - develop
 
-jobs:  
-  test:  
+jobs:
+  test:
     runs-on: ubuntu-latest
 
-    steps:  
+    steps:
       - name: 🛠️ Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🏗️ Setup Node.js  
-        uses: actions/setup-node@v4  
-        with:  
+      - name: 🏗️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
           node-version: 22
 
-      - name: 📦 Install dependencies  
-        working-directory: ./eco-task-backend
+      - name: 📦 Install dependencies
         run: npm install
 
-      - name: 📄 Create test environment file  
-        run: |  
-          echo "NODE_ENV=test" > .env.test  
-          echo "APP_KEY=some-random-key" >> .env.test  
-          echo "HOST=127.0.0.1" >> .env.test  
-          echo "LOG_LEVEL=info" >> .env.test  
+      - name: 📄 Create test environment file
+        run: |
+          echo "NODE_ENV=test" > .env.test
+          echo "APP_KEY=$(node ace generate:key --qr)" >> .env.test
+          echo "HOST=127.0.0.1" >> .env.test
+          echo "LOG_LEVEL=info" >> .env.test
           echo "SESSION_DRIVER=cookie" >> .env.test
-      
+
       - name: 📂 Check .env.test file
         run: cat .env.test
 
-      - name: 🔄 Load environment variables
-        run: export $(grep -v '^#' .env.test | xargs)
-
-      - name: 🧪 Run tests  
-        working-directory: ./eco-task-backend
-        run: npm test
+      - name: 🧪 Run tests
+        run: ENV_PATH=.env.test npm test
