@@ -35,6 +35,9 @@ jobs:
       - name: 📂 Check .env.test file
         run: cat .env.test
 
+      - name: 🔄 Load environment variables
+        run: export $(grep -v '^#' .env.test | xargs)
+
       - name: 🧪 Run tests  
         working-directory: ./eco-task-backend
         run: npm test
