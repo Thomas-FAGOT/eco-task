@@ -24,10 +24,6 @@ jobs:
         working-directory: ./eco-task-backend
         run: npm install
 
-      - name: 🚀 Run migrations  
-        working-directory: ./eco-task-backend
-        run: npm run migration:run
-
       - name: 🧪 Run tests  
         working-directory: ./eco-task-backend
         run: npm test
