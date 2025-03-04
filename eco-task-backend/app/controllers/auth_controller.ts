@@ -17,7 +17,6 @@ export default class AuthController {
 
   public async login({ request, response, auth }: HttpContext) {
     const { email, password } = request.only(['email', 'password'])
-    
 
     const user = await User.findBy('email', email)
     if (!user) {

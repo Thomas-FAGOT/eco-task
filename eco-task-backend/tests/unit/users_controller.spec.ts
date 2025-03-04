@@ -1,5 +1,4 @@
 import sinon from 'sinon'
-import { assert as japaAssert } from '@japa/assert'
 import { test } from '@japa/runner'
 import { HttpContext } from '@adonisjs/core/http'
 import UsersController from '../../app/controllers/users_controller.js'
@@ -33,7 +32,7 @@ test.group('Users Controller', (group) => {
     sinon.restore()
   })
 
-  test('index() doit retourner tous les utilisateurs avec leurs projets', async ({ assert }) => {
+  test('index() doit retourner tous les utilisateurs avec leurs projets', async () => {
     const usersMock = [{ id: 1, full_name: 'John Doe', projects: [] }]
 
     sinon.stub(User, 'query').returns({
@@ -49,7 +48,7 @@ test.group('Users Controller', (group) => {
     sinon.assert.calledWith(ctx.response.ok as sinon.SinonStub, usersMock)
   })
 
-  test('store() doit créer un nouvel utilisateur', async ({ assert }) => {
+  test('store() doit créer un nouvel utilisateur', async () => {
     const userMock = { id: 1, full_name: 'John Doe', email: 'john@example.com', password: 'hashed' }
 
     sinon.stub(User, 'create').resolves(userMock as any)
@@ -62,7 +61,7 @@ test.group('Users Controller', (group) => {
     sinon.assert.calledWith(ctx.response.created as sinon.SinonStub, userMock)
   })
 
-  test('show() doit retourner un utilisateur existant', async ({ assert }) => {
+  test('show() doit retourner un utilisateur existant', async () => {
     const userMock = { id: 1, full_name: 'John Doe', load: sinon.stub().resolves(null) }
 
     sinon.stub(User, 'find').resolves(userMock as any)
@@ -75,7 +74,7 @@ test.group('Users Controller', (group) => {
     sinon.assert.calledWith(ctx.response.ok as sinon.SinonStub, userMock)
   })
 
-  test('show() doit retourner une erreur 404 si l’utilisateur n’existe pas', async ({ assert }) => {
+  test('show() doit retourner une erreur 404 si l’utilisateur n’existe pas', async () => {
     sinon.stub(User, 'find').resolves(null)
 
     const ctx = createFakeContext()
@@ -86,7 +85,7 @@ test.group('Users Controller', (group) => {
     sinon.assert.calledWith(ctx.response.notFound as sinon.SinonStub, { message: 'User not found' })
   })
 
-  test('update() doit modifier un utilisateur existant', async ({ assert }) => {
+  test('update() doit modifier un utilisateur existant', async () => {
     const userMock = {
       id: 1,
       full_name: 'John Doe',
@@ -107,9 +106,7 @@ test.group('Users Controller', (group) => {
     sinon.assert.calledWith(ctx.response.ok as sinon.SinonStub, userMock)
   })
 
-  test('update() doit retourner une erreur 404 si l’utilisateur n’existe pas', async ({
-    assert,
-  }) => {
+  test('update() doit retourner une erreur 404 si l’utilisateur n’existe pas', async () => {
     sinon.stub(User, 'find').resolves(null)
 
     const ctx = createFakeContext()
@@ -120,7 +117,7 @@ test.group('Users Controller', (group) => {
     sinon.assert.calledWith(ctx.response.notFound as sinon.SinonStub, { message: 'User not found' })
   })
 
-  test('destroy() doit supprimer un utilisateur existant', async ({ assert }) => {
+  test('destroy() doit supprimer un utilisateur existant', async () => {
     const userMock = { id: 1, delete: sinon.stub() }
 
     sinon.stub(User, 'find').resolves(userMock as any)
@@ -134,9 +131,7 @@ test.group('Users Controller', (group) => {
     sinon.assert.called(ctx.response.noContent as sinon.SinonStub)
   })
 
-  test('destroy() doit retourner une erreur 404 si l’utilisateur n’existe pas', async ({
-    assert,
-  }) => {
+  test('destroy() doit retourner une erreur 404 si l’utilisateur n’existe pas', async () => {
     sinon.stub(User, 'find').resolves(null)
 
     const ctx = createFakeContext()
