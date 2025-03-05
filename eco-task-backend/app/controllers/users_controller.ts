@@ -33,7 +33,7 @@ export default class UsersController {
 
   public async destroy({ params, response }: HttpContext) {
     const user = await User.find(params.id)
-    if (!user) return response.notFound({ message: 'User not found' })
+    if (!user) return response.notFound({ message: 'User not found test' })
 
     await user.delete()
     return response.noContent()
