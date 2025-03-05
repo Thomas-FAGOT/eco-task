@@ -3,6 +3,7 @@ import Project from '#models/project'
 
 export default class ProjectsController {
   public async index({ response }: HttpContext) {
+    console.log('ProjectsController.index')
     const projects = await Project.all()
     return response.ok(projects)
   }

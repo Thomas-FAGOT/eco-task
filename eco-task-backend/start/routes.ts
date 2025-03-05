@@ -23,11 +23,12 @@ router
 
     router.get('/tasks', [TasksController, 'index'])
     router.post('/tasks', [TasksController, 'store'])
+    router.get('/tasks/project/:id', [TasksController, 'indexByProject'])
     router.get('/tasks/:id', [TasksController, 'show'])
     router.put('/tasks/:id', [TasksController, 'update'])
+    router.put('/checkTasks/:id', [TasksController, 'checkTask'])
     router.delete('/tasks/:id', [TasksController, 'destroy'])
     router.post('/tasks/:id/add-project', [TasksController, 'addProject'])
-    // router.get('/my-tasks', [TasksController, 'myTasks']).middleware(['auth'])
 
     router.get('/projects', [ProjectsController, 'index'])
     router.post('/projects', [ProjectsController, 'store'])

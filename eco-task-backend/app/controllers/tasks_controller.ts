@@ -8,6 +8,14 @@ export default class TasksController {
     return response.json(tasks)
   }
 
+  public async indexByProject({ params, response }: HttpContext) {
+    if (params.id === undefined) {
+      return response.badRequest({ message: 'projectId is required' })
+    }
+    const tasks = await Task.query().where('projectId', params.id)
+    return response.json(tasks)
+  }
+
   public async store({ request, response }: HttpContext) {
     const data = request.only([
       'title',
@@ -68,5 +76,12 @@ export default class TasksController {
     const projects = await user.related('projects').query().preload('tasks')
 
     return response.json(projects)
+  }
+
+  public async checkTask({ params, response }: HttpContext) {
+    const task = await Task.findOrFail(params.id)
+    task.check = !task.check
+    await task.save()
+    return response.json(task)
   }
 }

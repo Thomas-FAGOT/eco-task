@@ -24,6 +24,9 @@ export default class Task extends BaseModel {
   declare carbonFootprint: number
 
   @column()
+  declare check: boolean
+
+  @column()
   declare projectId: number
 
   @column.dateTime({ autoCreate: true })
