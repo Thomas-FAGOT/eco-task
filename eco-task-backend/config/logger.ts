@@ -14,12 +14,11 @@ const loggerConfig = defineConfig({
       enabled: true,
       name: env.get('APP_NAME'),
       level: env.get('LOG_LEVEL'),
-      transport: {
-        targets: targets()
-          .pushIf(!app.inProduction, targets.pretty())
-          .pushIf(app.inProduction, targets.file({ destination: 1 }))
-          .toArray(),
-      },
+      transport: app.inProduction
+        ? undefined // Pas de transport en production (stdout par défaut)
+        : {
+            targets: targets().push(targets.pretty()).toArray(), // Pretty logs en dev
+          },
     },
   },
 })
