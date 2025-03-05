@@ -51,6 +51,15 @@ jobs:
         working-directory: ./eco-task-backend
         run: npm install
 
+      - name: 📄 Create test environment file
+        working-directory: ./eco-task-backend
+        run: |
+          echo "NODE_ENV=test" > .env.test
+          echo "APP_KEY=some-random-key" >> .env.test
+          echo "HOST=127.0.0.1" >> .env.test
+          echo "LOG_LEVEL=info" >> .env.test
+          echo "SESSION_DRIVER=cookie" >> .env.test
+
       - name: 🧪 Run tests
         working-directory: ./eco-task-backend
         run: ENV_PATH=.env.test npm test
