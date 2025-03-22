@@ -57,7 +57,9 @@ jobs:
           cp .env.example .env.test
           echo "NODE_ENV=test" >> .env.test
           echo "APP_KEY=WPcsQJt-IXdhgwTjmCOTPuuTNDcTtFB0" >> .env.test
+          ls -l .env.test
+          cat .env.test
 
       - name: 🧪 Run tests
         working-directory: ./eco-task-backend
-        run: ENV_PATH=.env.example npm test
+        run: ENV_PATH=.env.test npm test
