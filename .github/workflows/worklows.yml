@@ -58,6 +58,10 @@ jobs:
           sed -i 's/^APP_KEY=.*/APP_KEY=WPcsQJt-IXdhgwTjmCOTPuuTNDcTtFB0/' .env.test
           sed -i 's/^NODE_ENV=.*/NODE_ENV=test/' .env.test
           cat .env.test
+      
+      - name: ⏳ Wait for .env.test to be ready
+        working-directory: ./eco-task-backend
+        run: sleep 2
 
       - name: 🧪 Run tests
         working-directory: ./eco-task-backend
