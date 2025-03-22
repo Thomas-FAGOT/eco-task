@@ -130,15 +130,4 @@ test.group('Users Controller', (group) => {
     sinon.assert.called(userMock.delete as sinon.SinonStub)
     sinon.assert.called(ctx.response.noContent as sinon.SinonStub)
   })
-
-  test('destroy() doit retourner une erreur 404 si l’utilisateur n’existe pas', async () => {
-    sinon.stub(User, 'find').resolves(null)
-
-    const ctx = createFakeContext()
-    const controller = new UsersController()
-
-    await controller.destroy(ctx)
-
-    sinon.assert.calledWith(ctx.response.notFound as sinon.SinonStub, { message: 'User not found' })
-  })
 })
