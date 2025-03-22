@@ -55,8 +55,7 @@ jobs:
         working-directory: ./eco-task-backend
         run: |
           cp .env.example .env.test
-          echo "NODE_ENV=test" >> .env.test
-          echo "APP_KEY=WPcsQJt-IXdhgwTjmCOTPuuTNDcTtFB0" >> .env.test
+          sed -i 's/NODE_ENV=development/NODE_ENV=test/' .env.test
           ls -l .env.test
           cat .env.test
 
