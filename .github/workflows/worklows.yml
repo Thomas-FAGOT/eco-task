@@ -60,4 +60,4 @@ jobs:
 
       - name: 🧪 Run tests
         working-directory: ./eco-task-backend
-        run: npm test
+        run: ENV_PATH=.env.example npm test
