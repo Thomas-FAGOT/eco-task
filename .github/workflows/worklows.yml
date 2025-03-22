@@ -69,4 +69,6 @@ jobs:
 
       - name: 🧪 Run tests
         working-directory: ./eco-task-backend
-        run: ENV_PATH=.env.test npm test
+        run: |
+          export $(cat .env.test | xargs)
+          npm test
