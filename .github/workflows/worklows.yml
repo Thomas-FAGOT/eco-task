@@ -57,11 +57,15 @@ jobs:
           cp .env.example .env.test
           sed -i 's/^APP_KEY=.*/APP_KEY=WPcsQJt-IXdhgwTjmCOTPuuTNDcTtFB0/' .env.test
           sed -i 's/^NODE_ENV=.*/NODE_ENV=test/' .env.test
-          cat .env.test
       
-      - name: ⏳ Wait for .env.test to be ready
+      - name: ✅ Verify .env.test file exists
         working-directory: ./eco-task-backend
-        run: sleep 2
+        run: |
+          if [ ! -f .env.test ]; then
+            echo "❌ .env.test file is missing!"
+            exit 1
+          fi
+          cat .env.test
 
       - name: 🧪 Run tests
         working-directory: ./eco-task-backend
