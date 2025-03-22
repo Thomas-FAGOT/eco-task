@@ -24,7 +24,11 @@ router
     router.get('/tasks', [TasksController, 'index'])
     router.post('/tasks', [TasksController, 'store'])
     router.get('/tasks/project/:id', [TasksController, 'indexByProject'])
-    router.get('/tasks/:id', [TasksController, 'show'])
+    router.get('/tasks/carbon-foot-print', [TasksController, 'getCarbonFootprint'])
+    router.get('/tasks/project/:projectId/carbonfoot-print-history', [
+      TasksController,
+      'getCarbonFootprintHistory',
+    ])
     router.put('/tasks/:id', [TasksController, 'update'])
     router.put('/checkTasks/:id', [TasksController, 'checkTask'])
     router.delete('/tasks/:id', [TasksController, 'destroy'])

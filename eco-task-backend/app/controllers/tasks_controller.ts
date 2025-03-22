@@ -1,11 +1,16 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Task from '../models/task.js'
 import Project from '#models/project'
+import db from '@adonisjs/lucid/services/db'
 
 export default class TasksController {
   public async index({ response }: HttpContext) {
-    const tasks = await Task.all()
-    return response.json(tasks)
+    const taskQuery = db.from('tasks')
+    const carbonFootprint = await taskQuery.select('id', 'title as n')
+
+    return response.json(carbonFootprint)
+    // const tasks = await Task.all()
+    // return response.json(tasks)
   }
 
   public async indexByProject({ params, response }: HttpContext) {
@@ -26,13 +31,10 @@ export default class TasksController {
       'projectId',
     ])
     const task = await Task.create(data)
+    if (task) {
+      this.updateCarbonHistory(data.projectId)
+    }
     return response.status(201).json(task)
-  }
-
-  public async show({ params, response }: HttpContext) {
-    const task = await Task.findOrFail(params.id)
-    console.log('Task:', task)
-    return response.json(task)
   }
 
   public async update({ params, request, response }: HttpContext) {
@@ -82,6 +84,46 @@ export default class TasksController {
     const task = await Task.findOrFail(params.id)
     task.check = !task.check
     await task.save()
+    await this.updateCarbonHistory(task.projectId)
     return response.json(task)
+  }
+
+  public async getCarbonFootprint({ response }: HttpContext) {
+    const taskQuery = db.from('tasks')
+
+    const carbonFootprint = await taskQuery
+      .select('project_id')
+      .sum('carbon_footprint as total')
+      .groupBy('project_id')
+
+    return response.json(carbonFootprint)
+  }
+
+  public async getCarbonFootprintHistory({ response, params }: HttpContext) {
+    const { projectId } = params
+
+    const history = await db
+      .from('carbon_history')
+      .where('project_id', projectId)
+      .select('recorded_at')
+      .sum('carbon_footprint_total as total')
+      .groupBy('recorded_at')
+      .orderBy('recorded_at', 'asc')
+
+    return response.json(history)
+  }
+
+  public async updateCarbonHistory(projectId: number) {
+    const taskQuery = db.from('tasks')
+
+    const totalCarbonFootprint = await taskQuery
+      .where('project_id', projectId)
+      .andWhere('check', false) // Seulement les tâches non terminées
+      .sum('carbon_footprint as total')
+
+    await db.table('carbon_history').insert({
+      project_id: projectId,
+      carbon_footprint_total: totalCarbonFootprint[0].total,
+    })
   }
 }
