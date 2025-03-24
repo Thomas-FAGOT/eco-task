@@ -6,11 +6,11 @@ services:
       context: ./eco-task-backend
       dockerfile: Dockerfile
     ports:
-      - "4000:3333"
+      - "3333:3333"
     volumes:
       - ./eco-task-backend:/app
       - /app/node_modules
-      - sqlite_data:/app/tmp  # Monte le dossier où est stockée la DB SQLite
+      - sqlite_data:/app/tmp
     environment:
       - NODE_ENV=development
       - HOST=0.0.0.0
@@ -28,14 +28,13 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://backend:3333 # Utilise "backend" comme nom de service
-    depends_on:
+      - NEXT_PUBLIC_API_URL=http://localhost:3333/api
       - backend
     networks:
       - eco-task
 
 volumes:
-  sqlite_data:  # Volume pour persister la base SQLite
+  sqlite_data:
 
 networks:
   eco-task:
