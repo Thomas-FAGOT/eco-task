@@ -73,40 +73,27 @@ jobs:
           export $(cat .env.test | xargs)
           npm test
 
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    needs: test # Cette étape dépend de l'étape test pour s'assurer
+    needs: test # Ne se lance que si les tests passent
+    if: github.ref == 'refs/heads/main'
     steps:
-      - name: 🛠️ Checkout repository
+      - name: 📂 Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🏗️ Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
-          cache-dependency-path: eco-task-backend/package-lock.json
-
-      - name: 📦 Install dependencies
-        working-directory: ./eco-task-backend
-        run: npm install
-
-      - name: 📄 Create production environment file
-        working-directory: ./eco-task-backend
+      - name: 🔑 Setup SSH Key
         run: |
-          cp .env.example .env.production
-          sed -i 's/^APP_KEY=.*/APP_KEY=WPcsQJt-IXdhgwTjmCOTPuuTNDcTtFB0/' .env.production
-          sed -i 's/^NODE_ENV=.*/NODE_ENV=production/' .env.production
-      
-      - name: ✅ Verify .env.production file exists
-        working-directory: ./eco-task-backend
-        run: |
-          if [ ! -f .env.production ]; then
-            echo "❌ .env.production file is missing!"
-            exit 1
-          fi
-          cat .env.production
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 92.112.192.183 >> ~/.ssh/known_hosts
 
-      - name: 🏗️ Build application
-        working-directory: ./eco-task-backend
-        run: npm run build
+      - name: 🚀 Deploy to Server
+        run: |
+          ssh root@92.112.192.183 << 'EOF'
+          cd /ynov/thomas/eco-task
+          git pull origin main
+          npm install --production
+          npm run build
+          pm2 restart ton-app
+          EOF
