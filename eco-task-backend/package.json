@@ -69,10 +69,11 @@
     "edge.js": "^6.2.1",
     "jsonwebtoken": "^9.0.2",
     "luxon": "^3.5.0",
-    "reflect-metadata": "^0.2.2",
-    "string-width": "4.2.3",
+    "pg": "^8.14.1",
+    "pino": "^9.6.0",
     "pino-pretty": "^7.0.0",
-    "pino": "^9.6.0"
+    "reflect-metadata": "^0.2.2",
+    "string-width": "4.2.3"
   },
   "hotHook": {
     "boundaries": [
