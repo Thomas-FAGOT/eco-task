@@ -48,7 +48,7 @@ services:
       POSTGRES_PASSWORD=mypassword
       POSTGRES_DB=mydatabase
     volumes:
-      -pg_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
     networks:
       - eco-task
     expose:
