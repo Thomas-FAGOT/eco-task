@@ -93,7 +93,4 @@ jobs:
           ssh root@92.112.192.183 << 'EOF'
           cd /ynov/thomas/eco-task
           git pull origin main
-          npm install --production
-          npm run build
-          pm2 restart ton-app
-          EOF
+          docker compose up -d --build
