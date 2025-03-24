@@ -96,7 +96,7 @@ jobs:
 
           cd eco-task-backend/
           cp .env.example .env
-          grep -q "APP_KEY=" .env || node ace generate:key
+          node ace generate:key
           yarn build
           cp .env build/.env
 
