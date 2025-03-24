@@ -1,16 +1,23 @@
-FROM node:20.12.2-alpine3.18 AS base
+FROM node:22-alpine3.18 AS base
 
 # All deps stage
 FROM base AS deps
 WORKDIR /app
+# Add build dependencies
+RUN apk add --no-cache python3 make g++ gcc
+
 ADD package.json package-lock.json ./
-RUN npm ci
+RUN npm config set fetch-retry-maxtimeout 120000
+RUN yarn install
 
 # Production only deps stage
 FROM base AS production-deps
 WORKDIR /app
+# Add build dependencies
+RUN apk add --no-cache python3 make g++ gcc
+
 ADD package.json package-lock.json ./
-RUN npm ci --omit=dev
+RUN yarn install --production
 
 # Build stage
 FROM base AS build
