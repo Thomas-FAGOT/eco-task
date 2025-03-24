@@ -1,20 +1,29 @@
-# Étape 1 : Utilisation d'une image légère Node.js
-FROM node:20-bullseye
+FROM node:20.12.2-alpine3.18 AS base
 
-# Définition du répertoire de travail
+# All deps stage
+FROM base AS deps
 WORKDIR /app
+ADD package.json package-lock.json ./
+RUN npm ci
 
-# Copie des fichiers de dépendances
-COPY package.json package-lock.json ./
-
-# Installation propre des dépendances (sans utiliser celles de l'hôte)
+# Production only deps stage
+FROM base AS production-deps
+WORKDIR /app
+ADD package.json package-lock.json ./
 RUN npm ci --omit=dev
 
-# Copie du reste de l'application
-COPY . .
+# Build stage
+FROM base AS build
+WORKDIR /app
+COPY --from=deps /app/node_modules /app/node_modules
+ADD . .
+RUN node ace build
 
-# Exposition du port
-EXPOSE 3333
-
-# Commande de démarrage en mode développement avec Nodemon
-CMD ["npm", "run", "dev"]
+# Production stage
+FROM base
+ENV NODE_ENV=production
+WORKDIR /app
+COPY --from=production-deps /app/node_modules /app/node_modules
+COPY --from=build /app/build /app
+EXPOSE 8080
+CMD ["node", "./bin/server.js"]

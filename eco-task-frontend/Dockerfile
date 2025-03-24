@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Exposition du port (Next.js tourne sur 3000 par défaut)
-EXPOSE 3000
+EXPOSE 4718
 
 # Commande de démarrage en mode développement
 CMD ["npm", "run", "dev"]

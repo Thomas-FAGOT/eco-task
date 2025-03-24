@@ -6,11 +6,9 @@ services:
       context: ./eco-task-backend
       dockerfile: Dockerfile
     ports:
-      - "3333:3333"
+      - "4717:3333"
     volumes:
-      - ./eco-task-backend:/app
-      - /app/node_modules
-      - sqlite_data:/app/tmp
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - NODE_ENV=development
       - HOST=0.0.0.0
@@ -22,13 +20,13 @@ services:
       context: ./eco-task-frontend
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "4718:3000"
     volumes:
       - ./eco-task-frontend:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:3333/api
+      - NEXT_PUBLIC_API_URL=http://92.112.192.183:4717/api
       - backend
     networks:
       - eco-task
