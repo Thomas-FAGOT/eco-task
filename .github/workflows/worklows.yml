@@ -95,7 +95,7 @@ jobs:
           git pull origin main
 
           cd eco-task-backend/
-          [ ! -f .env ] && cp .env.example .env
+          cp .env.example .env
           grep -q "APP_KEY=" .env || node ace generate:key
           yarn build
           cp .env build/.env
@@ -103,7 +103,6 @@ jobs:
           cd ../
           docker compose build
           docker compose up -d
-          docker image prune -f
           EOF
 
       - name: 🧹 Cleanup SSH Key
