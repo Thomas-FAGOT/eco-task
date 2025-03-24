@@ -27,6 +27,10 @@ docker exec -it <id_du_backend> sh
 npm rebuild better-sqlite3
 ```
 
+## Fonctionnement des pipelines
+Chaque push sur github déclanche une pipeline comprenant les test de lint, les tests et le build de l'application.
+En cas de problème se reférer au fichier .github\workflows\worklows.yml
+
 ## Commandes utiles
 #### Création des fichiers de modèle et de migration
 ```sh
