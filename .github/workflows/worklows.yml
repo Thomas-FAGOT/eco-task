@@ -86,11 +86,27 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          ssh-keygen -R 92.112.192.183
           ssh-keyscan -H 92.112.192.183 >> ~/.ssh/known_hosts
+          unset HISTFILE
 
       - name: 🚀 Deploy to Server
         run: |
           ssh root@92.112.192.183 << 'EOF'
           cd /ynov/thomas/eco-task
           git pull origin main
-          docker compose up -d --build
+
+          cd eco-task-backend/
+          [ ! -f .env ] && cp .env.example .env
+          grep -q "APP_KEY=" .env || node ace generate:key
+          yarn build
+          cp .env build/.env
+
+          cd ../
+          docker compose build
+          docker compose up -d
+          docker image prune -f
+          EOF
+
+      - name: 🧹 Cleanup SSH Key
+        run: rm -f ~/.ssh/id_rsa
