@@ -12,9 +12,17 @@ services:
     environment:
       - NODE_ENV=development
       - HOST=0.0.0.0
+      - DB_CONNECTION=pg
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=myuser
+      - DB_PASSWORD=mypassword
+      - DB_DATABASE=mydatabase
     env_file: ./eco-task-backend/.env
     networks:
       - eco-task
+    depends_on:
+      - db
 
   frontend:
     build:
@@ -32,8 +40,23 @@ services:
     networks:
       - eco-task
 
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER=myuser
+      POSTGRES_PASSWORD=mypassword
+      POSTGRES_DB=mydatabase
+    volumes:
+      -pg_data:/var/lib/postgresql/data
+    networks:
+      - eco-task
+    expose:
+      - "5432"
+
 volumes:
-  sqlite_data:
+  pg_data:
 
 networks:
   eco-task:
+    internal: true
