@@ -93,6 +93,7 @@ jobs:
           ssh root@92.112.192.183 << 'EOF'
           cd /ynov/thomas/eco-task
           git pull origin main
+          docker compose down
           docker compose up -d --build
 
       - name: 🧹 Cleanup SSH Key
