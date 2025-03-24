@@ -44,9 +44,9 @@ services:
     image: postgres:16
     restart: always
     environment:
-      POSTGRES_USER=myuser
-      POSTGRES_PASSWORD=mypassword
-      POSTGRES_DB=mydatabase
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=mydatabase
     volumes:
       - pg_data:/var/lib/postgresql/data
     networks:
