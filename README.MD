@@ -16,20 +16,33 @@
 ```sh
 git clone https://github.com/Thomas-FAGOT/eco-task.git
 docker compose up
-```
-
-## Gestion des erreurs liées à `better-sqlite3`
-Il m'est arrivé plusieurs fois d'avoir des erreurs avec `better-sqlite3`.
-Dans ce cas pas de pannique, il suffit d'executer les commandes suivantes :
-```sh
-docker ps  # Récupérer l'ID du container du backend
-docker exec -it <id_du_backend> sh
-npm rebuild better-sqlite3
+docker ps
+docker exec -it id_du_container_backend sh
+node ace migration:run
 ```
 
 ## Fonctionnement des pipelines
-Chaque push sur github déclanche une pipeline comprenant les test de lint, les tests et le build de l'application.
+Chaque push sur github déclanche une pipeline comprenant 3 jobs :
+1. test de lint et prettier
+2. les tests (unitaire dans le backend)
+3. le déploiement
+    1. connection au server distant
+    2. pull du repo
+    3. rebuild des containers
+
 En cas de problème se reférer au fichier .github\workflows\worklows.yml
+
+---
+
+## Difficultés rencontrées
+- Première expérience avec **GitHub Actions**, **Dockerfile** et **docker-compose.yml**.
+- Découverte du framework **AdonisJS** et **NEXT.JS**.
+- Gestion des problèmes de **CORS**.
+- Difficultés avec la base de données **SQLite 3**, qui est la BDD par défaut d'AdonisJS. Je suis donc passé sur **PostgreSQL**.
+- Première mise en production d'un projet.
+- Difficulté à faire tourner docker sur mon PC.
+
+---
 
 ## Commandes utiles
 #### Création des fichiers de modèle et de migration
@@ -48,38 +61,15 @@ node ace migration:run
 ```sh
 node ace make:controller TasksController
 ```
-
----
-
-## Difficultés rencontrées
-- Première expérience avec **GitHub Actions**, **Dockerfile** et **docker-compose.yml**.
-- Découverte du framework **AdonisJS**.
-- Gestion des problèmes de **CORS**.
-- Difficultés avec la base de données **SQLite 3**, qui est la BDD par défaut d'AdonisJS.
-- Première mise en production d'un projet.
-- Problème inexpliqué : **mon frontend ne veut pas s'ajouter à Git !** 🤔
-
----
-
-## Commande pour builder le projet
+### Commande pour builder le projet
 ```sh
 node ace build
 ```
 
 ---
 
-## Licence
-Ce projet est sous licence MIT. Consultez le fichier `LICENSE` pour plus d’informations.
-
----
-
 ## Auteurs
-Développé par [Ton Nom ou Ton Pseudo].
-
----
-
-## Contribution
-Les contributions sont les bienvenues ! Merci de suivre les bonnes pratiques de développement et d’ouvrir une issue avant de proposer une pull request.
+Développé par FAGOT Thomas.
 
 ---
 
