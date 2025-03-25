@@ -21,6 +21,9 @@ docker exec -it id_du_container_backend sh
 node ace migration:run
 ```
 
+## Production
+voici l'URL du site : http://92.112.192.183:4718
+
 ## Fonctionnement des pipelines
 Chaque push sur github déclanche une pipeline comprenant 3 jobs :
 1. test de lint et prettier
